@@ -1,0 +1,56 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/security/oauth2 
+        http://www.springframework.org/schema/security/spring-security-oauth2-1.0.xsd
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<context:component-scan
+		base-package="org.jyougo.google.oauth2.controller, org.jyougo.google.oauth2.service" />
+
+	<mvc:annotation-driven />
+
+	<bean id="propertyConfigurerList"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:/frontend_local.properties</value>
+				<value>classpath:/raw.application.properties</value>
+				<value>classpath:/application.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="properties" ref="propertyConfigurerList" />
+	</bean>
+
+	<bean class="com.google.api.client.json.jackson2.JacksonFactory"
+		id="jacksonFactory" />
+
+	<bean class="com.google.api.client.http.javanet.NetHttpTransport"
+		id="httpTransport" />
+
+	<bean class="org.springframework.web.client.RestTemplate" id="restTemplate" />
+
+	<bean id="dataClaimingService"
+		class="org.jyougo.google.oauth2.service.DataClaimingServiceImpl">
+		<property name="serverName" value="${serverAddress}" />
+		<property name="accessTokenUri" value="${accessTokenUri}" />
+		<property name="jsonFactory" ref="jacksonFactory" />
+		<property name="httpTransport" ref="httpTransport" />
+		<property name="clientId" value="${clientId}" />
+		<property name="clientSecret" value="${clientSecret}" />
+		<property name="userAuthorizationUri" value="${userAuthorizationUri}" />
+		<property name="scopes" value="${scopes}" />
+	</bean>
+</beans>
