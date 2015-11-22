@@ -8,3 +8,13 @@ It is an open-source library, and contributions are welcome.
 
 More references:
 https://developers.google.com/api-client-library/java/google-oauth-java-client/
+
+How to try this example:
+
+1. Download the source code
+2. Register a client application at ORCID Sandbox, and you'll get an client ID and the corresponding secret.
+3. Put the client ID and secret to file /src/main/resources/raw.application.properties
+4. Run mvn install to generate the war file, GoogleOAuthClientJavaExample.war
+5. Run Tomcat with the war file
+6. Start the authorization process via the following URL:
+http://localhost:8080/GoogleOAuthClientJavaExample/dataclaiming/login 
